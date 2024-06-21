@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #getAllStudent {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        #student-form, #updateStudent, #deleteStudent {
+            max-width: 500px;
+            margin: auto;
+        }
+
+            #student-form input, #updateStudent input, #deleteStudent input {
+                display: block;
+                width: calc(100% - 20px);
+                margin: 10px auto;
+            }
+
+        #getAllStudent p {
+            margin: 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+            #getAllStudent p:last-child {
+                border-bottom: none;
+            }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Student Management</h1>
+    <div id="getAllStudent"></div>
+
+    <h2>Add New Student</h2>
+    <form id="student-form">
+        <input type="text" id="student-name" placeholder="Name" required>
+        <input type="number" id="student-age" placeholder="Age" required>
+        <button type="submit">Add Student</button>
+    </form>
+
+    <h2>Update Student</h2>
+    <form id="updateStudent">
+        <input type="number" id="update-student-id" placeholder="Student ID" required>
+        <input type="text" id="update-student-name" placeholder="Name" required>
+        <input type="number" id="update-student-age" placeholder="Age" required>
+        <button type="submit">Update Student</button>
+    </form>
+
+    <h2>Delete Student</h2>
+    <form id="deleteStudent">
+        <input type="number" id="delete-student-id" placeholder="Student ID" required>
+        <button type="submit">Delete Student</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            fetchStudents();
+
+            $('#student-form').submit(function (event) {
+                event.preventDefault();
+                const name = $('#student-name').val();
+                const age = $('#student-age').val();
+                addStudent({ name, age });
+            });
+
+            $('#updateStudent').submit(function (event) {
+                event.preventDefault();
+                const id = $('#update-student-id').val();
+                const name = $('#update-student-name').val();
+                const age = $('#update-student-age').val();
+                updateStudent({ idStudent: id, name, age });
+            });
+
+            $('#deleteStudent').submit(function (event) {
+                event.preventDefault();
+                const id = $('#delete-student-id').val();
+                deleteStudent(id);
+            });
+        });
+
+        function fetchStudents() {
+            $.ajax({
+                url: '/api/student',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    const studentList = $('#getAllStudent   ');
+                    studentList.empty();
+                    data.forEach(student => {
+                        const studentItem = $('<div></div>')
+                            .addClass('student-item')
+                            .text(`${student.idStudent} - ${student.name} - Age: ${student.age}`);
+                        studentList.append(studentItem);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching students:', error);
+                }
+            });
+        }
+
+        function addStudent(student) {
+            $.ajax({
+                url: '/api/student',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(student),
+                success: function () {
+                    fetchStudents();
+                    $('#student-form')[0].reset();
+                },
+                error: function (error) {
+                    console.error('Error adding student:', error);
+                }
+            });
+        }
+
+        function updateStudent(student) {
+            $.ajax({
+                url: `/api/student/${student.idStudent}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(student),
+                success: function () {
+                    fetchStudents();
+                    $('#updateStudent')[0].reset();
+                },
+                error: function (error) {
+                    console.error('Error updating student:', error);
+                }
+            });
+        }
+
+        function deleteStudent(id) {
+            $.ajax({
+                url: `/api/student/${id}`,
+                method: 'DELETE',
+                success: function () {
+                    fetchStudents();
+                    $('#deleteStudent')[0].reset();
+                },
+                error: function (error) {
+                    console.error('Error deleting student:', error);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

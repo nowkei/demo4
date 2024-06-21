@@ -1,0 +1,6 @@
+@Demo_BKAV_HostAddress = http://localhost:5100
+
+GET {{Demo_BKAV_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

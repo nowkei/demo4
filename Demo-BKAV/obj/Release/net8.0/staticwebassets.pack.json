@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\scripts.js",
+      "PackagePath": "staticwebassets\\scripts.js"
+    },
+    {
+      "Id": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\style.css",
+      "PackagePath": "staticwebassets\\style.css"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.Demo-BKAV.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.build.Demo-BKAV.props",
+      "PackagePath": "build\\Demo-BKAV.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Demo-BKAV.props",
+      "PackagePath": "buildMultiTargeting\\Demo-BKAV.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildTransitive.Demo-BKAV.props",
+      "PackagePath": "buildTransitive\\Demo-BKAV.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

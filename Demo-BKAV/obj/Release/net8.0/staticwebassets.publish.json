@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "hW+WNRUNyfqHOTgmZpB2tkTIOgwxRtvOXVgQaE74tXY=",
+  "Source": "Demo-BKAV",
+  "BasePath": "_content/Demo-BKAV",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Demo-BKAV\\wwwroot",
+      "Source": "Demo-BKAV",
+      "ContentRoot": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\",
+      "BasePath": "_content/Demo-BKAV",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\index.html",
+      "SourceId": "Demo-BKAV",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\",
+      "BasePath": "_content/Demo-BKAV",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\scripts.js",
+      "SourceId": "Demo-BKAV",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\",
+      "BasePath": "_content/Demo-BKAV",
+      "RelativePath": "scripts.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\scripts.js"
+    },
+    {
+      "Identity": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\style.css",
+      "SourceId": "Demo-BKAV",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bkav1\\Demo_CSharp\\Demo-BKAV\\wwwroot\\",
+      "BasePath": "_content/Demo-BKAV",
+      "RelativePath": "style.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\style.css"
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .todo-app {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+            .todo-app h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+        .new-todo {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+
+            .todo-list li {
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+                .todo-list li:last-child {
+                    border-bottom: none;
+                }
+
+                .todo-list li.completed {
+                    text-decoration: line-through;
+                    color: #999;
+                }
+
+                .todo-list li .delete {
+                    cursor: pointer;
+                    color: black;
+                }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+            .footer button {
+                background: #eee;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                border-radius: 3px;
+            }
+
+                .footer button:hover {
+                    background: #ddd;
+                }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <div class="todo-app">
+        <h1>Todos</h1>
+        <input type="text" class="new-todo" placeholder="What needs to be done?" autofocus>
+        <div class="toggle-all-container hidden">
+            <input type="checkbox" id="toggle-all">
+            <label for="toggle-all">Mark all as complete</label>
+        </div>
+        <ul class="todo-list"></ul>
+        <div class="footer hidden">
+            <span class="todo-count"></span>
+            <button class="clear-completed hidden">Clear completed items</button>
+        </div>
+    </div>
+    <script>
+        var Todo = Backbone.Model.extend({
+            defaults: {
+                text: '',
+                completed: false
+            }
+        });
+
+        var TodoList = Backbone.Collection.extend({
+            model: Todo
+        });
+
+        var todos = new TodoList();
+
+        var TodoView = Backbone.View.extend({
+            tagName: 'li',
+            template: _.template('<input type="checkbox" <% if(completed) { %>checked<% } %> /> <%= text %> <span class="delete">X</span>'),
+
+            events: {
+                'click .delete': 'removeTodo',
+                'change input[type="checkbox"]': 'toggleCompleted'
+            },
+
+            initialize: function () {
+                this.listenTo(this.model, 'change', this.render);
+                this.listenTo(this.model, 'destroy', this.remove);
+            },
+
+            render: function () {
+                this.$el.html(this.template(this.model.toJSON()));
+                this.$el.toggleClass('completed', this.model.get('completed'));
+                return this;
+            },
+
+            removeTodo: function () {
+                this.model.destroy();
+            },
+
+            toggleCompleted: function () {
+                this.model.set('completed', !this.model.get('completed'));
+            }
+        });
+
+        var AppView = Backbone.View.extend({
+            el: '.todo-app',
+
+            events: {
+                'keypress .new-todo': 'createTodoOnEnter',
+                'change #toggle-all': 'toggleAllCompleted',
+                'click .clear-completed': 'clearCompleted'
+            },
+
+            initialize: function () {
+                this.input = this.$('.new-todo');
+                this.toggleAllCheckbox = this.$('#toggle-all');
+                this.toggleAllContainer = this.$('.toggle-all-container');
+                this.footer = this.$('.footer');
+                this.todoList = this.$('.todo-list');
+                this.clearCompletedBtn = this.$('.clear-completed');
+
+                this.listenTo(todos, 'add', this.addOne);
+                this.listenTo(todos, 'reset', this.addAll);
+                this.listenTo(todos, 'all', this.render);
+
+                todos.fetch();
+            },
+
+            render: function () {
+                var completed = todos.where({ completed: true }).length;
+                var remaining = todos.where({ completed: false }).length;
+
+                if (todos.length) {
+                    this.toggleAllContainer.removeClass('hidden');
+                    this.footer.removeClass('hidden');
+                } else {
+                    this.toggleAllContainer.addClass('hidden');
+                    this.footer.addClass('hidden');
+                }
+
+                this.footer.find('.todo-count').text(remaining + ' items left');
+                this.toggleAllCheckbox.prop('checked', !remaining);
+                this.clearCompletedBtn.toggleClass('hidden', completed === 0);
+            },
+
+            addOne: function (todo) {
+                var view = new TodoView({ model: todo });
+                this.todoList.append(view.render().el);
+            },
+
+            addAll: function () {
+                this.todoList.html('');
+                todos.each(this.addOne, this);
+            },
+
+            createTodoOnEnter: function (e) {
+                if (e.which !== 13 || !this.input.val().trim()) {
+                    return;
+                }
+                todos.add({ text: this.input.val().trim() });
+                this.input.val('');
+            },
+
+            toggleAllCompleted: function () {
+                var completed = this.toggleAllCheckbox.prop('checked');
+                todos.each(function (todo) {
+                    todo.set('completed', completed);
+                });
+            },
+
+            clearCompleted: function () {
+                _.invoke(todos.where({ completed: true }), 'destroy');
+            }
+        });
+
+        var App = new AppView();
+    </script>
+</body>
+</html>
